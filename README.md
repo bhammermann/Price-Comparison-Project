@@ -7,3 +7,6 @@ This is meant to be achieved by using an open API(s) that provides us with the d
 
 Additionally a paper will be written, describing the planning, execution and reflection of this project.
 
+## DEV SETUP
+
+Before starting you will have to set the MongoDB user and password.
