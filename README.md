@@ -6,3 +6,4 @@ The idea behind the project is to create a website that compares prices of produ
 This is meant to be achieved by using an open API(s) that provides us with the data necessary to create a website that compares prices of chosen products.
 
 Additionally a paper will be written, describing the planning, execution and reflection of this project.
+
