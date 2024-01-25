@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-
+####### Code um die HTML-Soup von der URL: https://geizhals.de/?cat=gra16_512 zu laden
 # url = 'https://geizhals.de/?cat=gra16_512'
 # html = requests.get(url)
 # print(html.text)
