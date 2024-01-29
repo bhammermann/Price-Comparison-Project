@@ -9,4 +9,4 @@ Additionally a paper will be written, describing the planning, execution and ref
 
 ## DEV SETUP
 
-Before starting you will have to set the MongoDB user and password.
+Before starting you will have to copy the .env.example file and name it .env. In the .env file you will need to insert the correct connection string of the MongoDB in order to establish a connection.
