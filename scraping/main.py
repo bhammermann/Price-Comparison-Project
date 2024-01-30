@@ -16,23 +16,39 @@ except:
 
 #set Database & Collection   
 mydb = myclient.Prices
-mycol = mydb.CPU
+mycol = mydb.GPU
 
 #data to be sent to MongoDB (example for one entry) --> should be replaced with data from scraping
-mydict = {"name": "Ryzen5 3600", "preis": "149€"}
+#mydict = {"name": "Ryzen5 3600", "preis": "149€"}
 
 ###example for more than one entry
 # mydict = {"name": "product0", "preis": "product0.price"},
 # {"name": "product1", "preis": "product1.price"},
 # {"name": "product2", "preis": "product2.price"}
 
-mycol.insert_one(mydict)
+#mycol.insert_one(mydict)
 #if you want to enter more than one entry: mycol.insert(mydict)
 
 
 ####### Code um die HTML-Soup von der URL: https://geizhals.de/?cat=gra16_512 zu laden
-# url = 'https://geizhals.de/?cat=gra16_512'
-# html = requests.get(url)
+url = 'https://geizhals.de/?cat=gra16_512'
+resp = requests.get(url)
+
+s = BeautifulSoup(resp.text, 'html.parser')
+# with open('data.txt', 'r', encoding='utf-8') as file:
+#     n = file.read()
+
+# s = BeautifulSoup(n, 'html.parser')
+
+results = s.find(id='product0')
+data = results.find_all('span', class_='notrans')
+
+names = data[0].text
+prices = data[2].text
+
+mydict = {"name": names, "preis": prices}
+mycol.insert_one(mydict)
+
 # print(html.text)
 
 # with open('data.txt', 'r', encoding='utf-8') as file:
@@ -44,7 +60,7 @@ mycol.insert_one(mydict)
 
 # prices = results.find_all('span', class_='notrans')
 
-# print(prices[2])
+# print(data[0])
 
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
