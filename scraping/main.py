@@ -1,73 +1,9 @@
-import requests
-import os
-from dotenv import load_dotenv
-from pymongo import MongoClient
-from bs4 import BeautifulSoup
+# main_file.py
+from scraping_functions import GPU_Prices, CPU_Prices, Main_Prices, PSU_Prices, RAM_Prices, Case_Prices
 
-load_dotenv()
-
-
-#check connetion to MongoDB
-try:
-    myclient = MongoClient(os.getenv('MONGO_URI'))
-    print("Connected!")
-except:
-    print("Could not connect to MongoDB")
-
-#set Database & Collection   
-mydb = myclient.Prices
-mycol = mydb.GPU
-
-#data to be sent to MongoDB (example for one entry) --> should be replaced with data from scraping
-#mydict = {"name": "Ryzen5 3600", "preis": "149€"}
-
-###example for more than one entry
-# mydict = {"name": "product0", "preis": "product0.price"},
-# {"name": "product1", "preis": "product1.price"},
-# {"name": "product2", "preis": "product2.price"}
-
-#mycol.insert_one(mydict)
-#if you want to enter more than one entry: mycol.insert(mydict)
-
-
-####### Code um die HTML-Soup von der URL: https://geizhals.de/?cat=gra16_512 zu laden
-url = 'https://geizhals.de/?cat=gra16_512'
-resp = requests.get(url)
-
-s = BeautifulSoup(resp.text, 'html.parser')
-# with open('data.txt', 'r', encoding='utf-8') as file:
-#     n = file.read()
-
-# s = BeautifulSoup(n, 'html.parser')
-
-results = s.find(id='product0')
-data = results.find_all('span', class_='notrans')
-
-names = data[0].text
-prices = data[2].text
-
-mydict = {"name": names, "preis": prices}
-mycol.insert_one(mydict)
-
-# print(html.text)
-
-# with open('data.txt', 'r', encoding='utf-8') as file:
-#     n = file.read()
-
-# s = BeautifulSoup(n, 'html.parser')
-
-# results = s.find(id='product0')
-
-# prices = results.find_all('span', class_='notrans')
-
-# print(data[0])
-
-
-####### Code fürs Umleiten von den Daten in die Datei data.txt
-# if html.status_code == 200:
-#     html_text = html.text
-
-#     with open('data.txt', 'w', encoding='utf-8') as file:
-#         file.write(html_text)
-# else:
-#     print('failure')
+GPU_Prices()
+CPU_Prices()
+Main_Prices()
+PSU_Prices()
+RAM_Prices()
+Case_Prices()
