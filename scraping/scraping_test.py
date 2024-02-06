@@ -1,7 +1,7 @@
-###THIS SHOULD BE RUN ON A SERVER
+### FOR TESTING WITH LOCAL DATA
+
 
 import requests
-import time
 import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -20,14 +20,20 @@ except:
 #if you want to enter more than one entry: mycol.insert(mydict)
 
 
-####### Code um die HTML-Soup von Geizhals zu laden
+####### Code um die HTML-Soup von der URL: https://geizhals.de/?cat=gra16_512 zu laden
+
+# with open('data.txt', 'r', encoding='utf-8') as file:
+#     n = file.read()
+
+# s = BeautifulSoup(n, 'html.parser')
 
 def scrape_prices(url, category):
     mydb = myclient.Prices
     mycol = getattr(mydb, category)
 
-    resp = requests.get(url)
-    s = BeautifulSoup(resp.text, 'html.parser')
+    with open(url, 'r', encoding='utf-8') as file:
+        resp = file.read()
+    s = BeautifulSoup(resp, 'html.parser')
 
     i = 0
     
@@ -44,7 +50,7 @@ def scrape_prices(url, category):
         i += 1
 
 def GPU_Prices():
-    scrape_prices('https://geizhals.de/?cat=gra16_512', 'GPU')
+    scrape_prices('/home/bjorn/FOM/Price-Comparison-Project/scraping/data.txt', 'GPU')
 
 def CPU_Prices():
     scrape_prices('https://geizhals.de/?cat=cpuamdam4', 'CPU')
@@ -61,13 +67,7 @@ def RAM_Prices():
 def Case_Prices():
     scrape_prices('https://geizhals.de/?cat=gehatx', 'Case')
 
-
-###execute the functions one by one every ten minutes (60 minutes until all 6 functions have been executed)
-functions = [GPU_Prices, CPU_Prices, Main_Prices, PSU_Prices, RAM_Prices, Case_Prices]
-
-for func in functions:
-    func()
-    time.sleep(600)
+#GPU_Prices()
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
 # if html.status_code == 200:
