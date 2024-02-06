@@ -10,3 +10,17 @@ Additionally a paper will be written, describing the planning, execution and ref
 ## DEV SETUP
 
 Before starting you will have to copy the .env.example file and name it .env. In the .env file you will need to insert the correct connection string of the MongoDB in order to establish a connection.
+
+Furthermore if you want to execute the python script you will need to install some libraries:
+```console
+sudo apt install python3 pip
+```
+```console
+pip install pymongo
+```
+```console
+pip install beautifulsoup4
+```
+```console
+pip install python-dotenv
+```
