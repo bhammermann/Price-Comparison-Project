@@ -1,6 +1,184 @@
-parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"A2T1":[function(require,module,exports) {
-const t=require("http"),e=require("fs"),i=require("path"),o={".html":"text/html",".js":"text/javascript",".css":"text/css",".json":"application/json",".png":"image/png",".jpg":"image/jpg",".gif":"image/gif",".wav":"audio/wav",".mp4":"video/mp4",".woff":"application/font-woff",".ttf":"application/font-ttf",".eot":"application/vnd.ms-fontobject",".otf":"application/font-otf",".svg":"application/image/svg+xml"},a=t.createServer((t,a)=>{let n=i.join(__dirname,"public",t.url);n===i.join(__dirname,"public","/")&&(n=i.join(__dirname,"public","index.html"));const p=String(i.extname(n)).toLowerCase(),r=o[p]||"application/octet-stream";e.readFile(n,(t,e)=>{t?(a.writeHead(500),a.end(`Sorry, check with the site admin for error: ${t.code} ..\n`),a.end()):(a.writeHead(200,{"Content-Type":r}),a.end(e,"utf-8"))})});module.exports=a;
-},{}],"Focm":[function(require,module,exports) {
-const e=require("./app"),n="8888";e.listen(n,()=>{console.log("Server is listening on port 8888...")});
-},{"./app":"A2T1"}]},{},["Focm"], null)
+// modules are defined as an array
+// [ module function, map of requires ]
+//
+// map of requires is short require name -> numeric require
+//
+// anything defined in a previous bundle is accessed via the
+// orig method which is the require for previous bundles
+parcelRequire = (function (modules, cache, entry, globalName) {
+  // Save the require from previous bundle to this closure if any
+  var previousRequire = typeof parcelRequire === 'function' && parcelRequire;
+  var nodeRequire = typeof require === 'function' && require;
+
+  function newRequire(name, jumped) {
+    if (!cache[name]) {
+      if (!modules[name]) {
+        // if we cannot find the module within our internal map or
+        // cache jump to the current global require ie. the last bundle
+        // that was added to the page.
+        var currentRequire = typeof parcelRequire === 'function' && parcelRequire;
+        if (!jumped && currentRequire) {
+          return currentRequire(name, true);
+        }
+
+        // If there are other bundles on this page the require from the
+        // previous one is saved to 'previousRequire'. Repeat this as
+        // many times as there are bundles until the module is found or
+        // we exhaust the require chain.
+        if (previousRequire) {
+          return previousRequire(name, true);
+        }
+
+        // Try the node require function if it exists.
+        if (nodeRequire && typeof name === 'string') {
+          return nodeRequire(name);
+        }
+
+        var err = new Error('Cannot find module \'' + name + '\'');
+        err.code = 'MODULE_NOT_FOUND';
+        throw err;
+      }
+
+      localRequire.resolve = resolve;
+      localRequire.cache = {};
+
+      var module = cache[name] = new newRequire.Module(name);
+
+      modules[name][0].call(module.exports, localRequire, module, module.exports, this);
+    }
+
+    return cache[name].exports;
+
+    function localRequire(x){
+      return newRequire(localRequire.resolve(x));
+    }
+
+    function resolve(x){
+      return modules[name][1][x] || x;
+    }
+  }
+
+  function Module(moduleName) {
+    this.id = moduleName;
+    this.bundle = newRequire;
+    this.exports = {};
+  }
+
+  newRequire.isParcelRequire = true;
+  newRequire.Module = Module;
+  newRequire.modules = modules;
+  newRequire.cache = cache;
+  newRequire.parent = previousRequire;
+  newRequire.register = function (id, exports) {
+    modules[id] = [function (require, module) {
+      module.exports = exports;
+    }, {}];
+  };
+
+  var error;
+  for (var i = 0; i < entry.length; i++) {
+    try {
+      newRequire(entry[i]);
+    } catch (e) {
+      // Save first error but execute all entries
+      if (!error) {
+        error = e;
+      }
+    }
+  }
+
+  if (entry.length) {
+    // Expose entry point to Node, AMD or browser globals
+    // Based on https://github.com/ForbesLindesay/umd/blob/master/template.js
+    var mainExports = newRequire(entry[entry.length - 1]);
+
+    // CommonJS
+    if (typeof exports === "object" && typeof module !== "undefined") {
+      module.exports = mainExports;
+
+    // RequireJS
+    } else if (typeof define === "function" && define.amd) {
+     define(function () {
+       return mainExports;
+     });
+
+    // <script>
+    } else if (globalName) {
+      this[globalName] = mainExports;
+    }
+  }
+
+  // Override the current require with this new one
+  parcelRequire = newRequire;
+
+  if (error) {
+    // throw error from earlier, _after updating parcelRequire_
+    throw error;
+  }
+
+  return newRequire;
+})({"app.js":[function(require,module,exports) {
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const mimeTypes = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpg',
+  '.gif': 'image/gif',
+  '.wav': 'audio/wav',
+  '.mp4': 'video/mp4',
+  '.woff': 'application/font-woff',
+  '.ttf': 'application/font-ttf',
+  '.eot': 'application/vnd.ms-fontobject',
+  '.otf': 'application/font-otf',
+  '.svg': 'application/image/svg+xml'
+};
+const app = http.createServer((request, response) => {
+  let filePath = path.join(__dirname, 'public', request.url);
+  if (filePath === path.join(__dirname, 'public', '/')) filePath = path.join(__dirname, 'public', 'index.html');
+  const extname = String(path.extname(filePath)).toLowerCase();
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
+  fs.readFile(filePath, (error, content) => {
+    if (error) {
+      response.writeHead(500);
+      response.end(`Sorry, check with the site admin for error: ${error.code} ..\n`);
+      response.end();
+    } else {
+      response.writeHead(200, {
+        'Content-Type': contentType
+      });
+      response.end(content, 'utf-8');
+    }
+  });
+});
+module.exports = app;
+},{}],"mongodb.js":[function(require,module,exports) {
+const {
+  MongoClient
+} = require("mongodb");
+let uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+async function run() {
+  try {
+    await client.connect();
+    console.log("Connected");
+  } finally {
+    await client.close();
+  }
+}
+run().catch(console.dir);
+},{}],"index.js":[function(require,module,exports) {
+require('dotenv').config();
+const app = require('./app');
+const port = '8888';
+const db = require('./mongodb');
+
+// app.listen(port, () => {
+//   console.log(`Server is listening on port ${port}...`);
+// });
+},{"./app":"app.js","./mongodb":"mongodb.js"}]},{},["index.js"], null)
 //# sourceMappingURL=/index.js.map
