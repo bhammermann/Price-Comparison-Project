@@ -33,12 +33,14 @@ def scrape_prices(url, category):
     
     while i < 5:
         results = s.find(id=f'product{i}')
+        imgs = results.find_all('img')
         data = results.find_all('span', class_='notrans')
 
         names = data[0].text
         prices = data[2].text
+        image = imgs[0].get("src")
 
-        mydict = {"name": names, "preis": prices}
+        mydict = {"name": names, "preis": prices, "image": image}
         mycol.insert_one(mydict)
         
         i += 1
@@ -65,9 +67,11 @@ def Case_Prices():
 ###execute the functions one by one every ten minutes (60 minutes until all 6 functions have been executed)
 functions = [GPU_Prices, CPU_Prices, Main_Prices, PSU_Prices, RAM_Prices, Case_Prices]
 
-for func in functions:
-    func()
-    time.sleep(600)
+while True:
+    for func in functions:
+        func()
+        print(time.time(), ": Scraped ", func.__name__)
+        time.sleep(600)
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
 # if html.status_code == 200:

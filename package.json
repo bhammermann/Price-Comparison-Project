@@ -19,7 +19,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@fastify/mongodb": "^8.0.0",
+    "@fastify/view": "^8.2.0",
     "dotenv": "^16.3.2",
+    "ejs": "^3.1.9",
+    "fastify": "^4.26.0",
     "mongodb": "^6.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

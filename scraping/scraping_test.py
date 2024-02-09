@@ -67,7 +67,7 @@ def RAM_Prices():
 def Case_Prices():
     scrape_prices('https://geizhals.de/?cat=gehatx', 'Case')
 
-#GPU_Prices()
+GPU_Prices()
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
 # if html.status_code == 200:

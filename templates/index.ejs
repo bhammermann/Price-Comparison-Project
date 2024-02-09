@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <h1>GPUs</h1>
+        <ul>
+            <% GPU.forEach(function(gpu){ %>
+                <li>
+                    <h6><%= gpu.name %></h6>
+                    <p><%= gpu.preis %></p>
+                    <% if (gpu.image) { %>
+                        <img src="<%= gpu.image %>" />
+                      <% } %>
+                </li>
+            <% }); %>
+        </ul>
+
+
+        <h1>CPUs</h1>
+        <ul>
+            <% CPU.forEach(function(item){ %>
+                <li>
+                    <h6><%= item.name %></h6>
+                    <p><%= item.preis %></p>
+                </li>
+            <% }); %>
+        </ul>
+
+
+        <h1>Mainboards</h1>
+        <ul>
+            <% Mainboard.forEach(function(item){ %>
+                <li>
+                    <h6><%= item.name %></h6>
+                    <p><%= item.preis %></p>
+                </li>
+            <% }); %>
+        </ul>
+    </body>
+</html>
