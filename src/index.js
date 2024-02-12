@@ -47,7 +47,7 @@ fastify.get("/", async (req, reply) => {
     return reply.view("/templates/index.ejs", data);
 });
 
-fastify.listen({ host: "0.0.0.0", port: 3000 }, (err, address) => {
+fastify.listen({ host: "0.0.0.0", port: process.env.PORT ?? 3000 }, (err, address) => {
     if (err) {
         console.log("Failed to start web server.");
         console.log(err)
