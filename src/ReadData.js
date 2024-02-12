@@ -1,14 +1,14 @@
 const { MongoClient } = require('mongodb');
 
 
-module.exports.run = async function run(url) {
-    const dbName = 'Prices'; // Ändern Sie den Namen Ihrer Datenbank entsprechend
-    const client = new MongoClient(url);
+module.exports.run = async function run(uri) {
+    const dbName = 'Prices'; 
+    const client = new MongoClient(uri);
     await client.connect();
 
     const db = client.db(dbName);
 
-    // Überwachen von Änderungen in allen Sammlungen der Datenbank mit einem Change Stream
+    // hier werden auf Änderungen in der db geschaut
     const changeStream = db.watch();
     console.log("Changestream started")
 
@@ -18,18 +18,15 @@ module.exports.run = async function run(url) {
         //console.log('  Collection:', change.ns.coll); // Ausgabe des Namens der Sammlung, in der die Änderungen aufgetreten sind
         //console.log('  Änderung:', change);
 
-        // Je nach Collection-Aktualisierung können Sie unterschiedliche Logik implementieren
         switch(change.operationType) {
             case 'insert':
                 handleInsert(change.ns.coll, change.fullDocument);
                 break;
-            // Weitere Fälle (update, delete) können ebenfalls behandelt werden
             default:
                 console.log('Änderungstyp nicht unterstützt:', change.operationType);
         }
     });
 
-    // Sie können auch auf Fehler im Change Stream reagieren
     changeStream.on('error', function(err) {
         console.error('Fehler im Change Stream:', err);
     });
@@ -42,7 +39,7 @@ function handleInsert(collectionName, document) {
     const name = document.name;
     const preis = document.preis;
         
-    // Hier können Sie mit den Variablen `name` und `preis` arbeiten
+    // logging
     console.log('  Name:', name);
     console.log('  Preis:', preis);
 }

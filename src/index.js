@@ -9,6 +9,8 @@ if (!mongo_uri) {
     process.exit(1);
 }
 
+console.log(mongo_uri)
+
 const read = require('./ReadData')
 read.run(mongo_uri);
 
@@ -45,9 +47,10 @@ fastify.get("/", async (req, reply) => {
     return reply.view("/templates/index.ejs", data);
 });
 
-fastify.listen({ host: "0.0.0.0", port: 4000 }, (err, address) => {
+fastify.listen({ host: "0.0.0.0", port: 3000 }, (err, address) => {
     if (err) {
         console.log("Failed to start web server.");
+        console.log(err)
         process.exit(1);
     }
     console.log("Started webserver at", address);

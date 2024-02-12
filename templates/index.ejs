@@ -16,10 +16,13 @@
 
         <h1>CPUs</h1>
         <ul>
-            <% CPU.forEach(function(item){ %>
+            <% CPU.forEach(function(cpu){ %>
                 <li>
-                    <h6><%= item.name %></h6>
-                    <p><%= item.preis %></p>
+                    <h6><%= cpu.name %></h6>
+                    <p><%= cpu.preis %></p>
+                    <% if (cpu.image) { %>
+                        <img src="<%= cpu.image %>" />
+                      <% } %>
                 </li>
             <% }); %>
         </ul>
@@ -31,6 +34,48 @@
                 <li>
                     <h6><%= item.name %></h6>
                     <p><%= item.preis %></p>
+                    <% if (item.image) { %>
+                        <img src="<%= item.image %>" />
+                      <% } %>
+                </li>
+            <% }); %>
+        </ul>
+
+        <h1>PSUs</h1>
+        <ul>
+            <% PSU.forEach(function(item){ %>
+                <li>
+                    <h6><%= item.name %></h6>
+                    <p><%= item.preis %></p>
+                    <% if (item.image) { %>
+                        <img src="<%= item.image %>" />
+                      <% } %>
+                </li>
+            <% }); %>
+        </ul>
+
+        <h1>RAM</h1>
+        <ul>
+            <% RAM.forEach(function(item){ %>
+                <li>
+                    <h6><%= item.name %></h6>
+                    <p><%= item.preis %></p>
+                    <% if (item.image) { %>
+                        <img src="<%= item.image %>" />
+                      <% } %>
+                </li>
+            <% }); %>
+        </ul>
+
+        <h1>Cases</h1>
+        <ul>
+            <% Case.forEach(function(item){ %>
+                <li>
+                    <h6><%= item.name %></h6>
+                    <p><%= item.preis %></p>
+                    <% if (item.image) { %>
+                        <img src="<%= item.image %>" />
+                      <% } %>
                 </li>
             <% }); %>
         </ul>

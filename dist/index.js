@@ -156,29 +156,102 @@ const app = http.createServer((request, response) => {
   });
 });
 module.exports = app;
-},{}],"mongodb.js":[function(require,module,exports) {
+},{}],"ReadData.js":[function(require,module,exports) {
 const {
   MongoClient
-} = require("mongodb");
-let uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
-async function run() {
-  try {
-    await client.connect();
-    console.log("Connected");
-  } finally {
-    await client.close();
-  }
+} = require('mongodb');
+module.exports.run = async function run(uri) {
+  const dbName = 'Prices';
+  const client = new MongoClient(uri);
+  await client.connect();
+  const db = client.db(dbName);
+
+  // hier werden auf Änderungen in der db geschaut
+  const changeStream = db.watch();
+  console.log("Changestream started");
+
+  // Event-Handler für Änderungen in allen Sammlungen
+  changeStream.on('change', function (change) {
+    //console.log('Änderung in der Datenbank erkannt:');
+    //console.log('  Collection:', change.ns.coll); // Ausgabe des Namens der Sammlung, in der die Änderungen aufgetreten sind
+    //console.log('  Änderung:', change);
+
+    switch (change.operationType) {
+      case 'insert':
+        handleInsert(change.ns.coll, change.fullDocument);
+        break;
+      default:
+        console.log('Änderungstyp nicht unterstützt:', change.operationType);
+    }
+  });
+  changeStream.on('error', function (err) {
+    console.error('Fehler im Change Stream:', err);
+  });
+};
+
+// Funktion zum Behandeln von Einfügungen in verschiedenen Sammlungen
+function handleInsert(collectionName, document) {
+  console.log(`Neue Einträge in Sammlung "${collectionName}":`);
+  const name = document.name;
+  const preis = document.preis;
+
+  // logging
+  console.log('  Name:', name);
+  console.log('  Preis:', preis);
 }
-run().catch(console.dir);
 },{}],"index.js":[function(require,module,exports) {
 require('dotenv').config();
 const app = require('./app');
 const port = '8888';
-const db = require('./mongodb');
+const mongo_uri = process.env.MONGO_URI;
+if (!mongo_uri) {
+  console.log("Bitte MONGO_URI setzen.");
+  process.exit(1);
+}
+console.log(mongo_uri);
+const read = require('./ReadData');
+read.run(mongo_uri);
+
+// CommonJs
+const fastify = require('fastify')({
+  logger: true
+});
+fastify.register(require('@fastify/mongodb'), {
+  forceClose: true,
+  url: mongo_uri
+});
+fastify.register(require("@fastify/view"), {
+  engine: {
+    ejs: require("ejs")
+  }
+});
+fastify.get("/", async (req, reply) => {
+  const categories = ["GPU", "CPU", "Case", "Mainboard", "PSU", "RAM"];
+  const data = {};
+  for (const cat of categories) {
+    const collection = fastify.mongo.client.db('Prices').collection(cat);
+    const results = await collection.find({}).sort({
+      _id: -1
+    }).limit(5);
+    data[cat] = await results.toArray();
+  }
+  console.log(data);
+  return reply.view("/templates/index.ejs", data);
+});
+fastify.listen({
+  host: "0.0.0.0",
+  port: 3000
+}, (err, address) => {
+  if (err) {
+    console.log("Failed to start web server.");
+    console.log(err);
+    process.exit(1);
+  }
+  console.log("Started webserver at", address);
+});
 
 // app.listen(port, () => {
 //   console.log(`Server is listening on port ${port}...`);
 // });
-},{"./app":"app.js","./mongodb":"mongodb.js"}]},{},["index.js"], null)
+},{"./app":"app.js","./ReadData":"ReadData.js"}]},{},["index.js"], null)
 //# sourceMappingURL=/index.js.map
