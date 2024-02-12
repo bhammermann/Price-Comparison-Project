@@ -7,6 +7,8 @@ This is meant to be achieved by using an open API(s) that provides us with the d
 
 Additionally a paper will be written, describing the planning, execution and reflection of this project.
 
+***Website is available under:*** 164.30.70.213:80
+
 ## DEV SETUP
 
 Before starting you will have to copy the .env.example file and name it .env. In the .env file you will need to insert the correct connection string of the MongoDB in order to establish a connection.
