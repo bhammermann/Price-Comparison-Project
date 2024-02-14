@@ -1,5 +1,5 @@
 ###THIS SHOULD BE RUN ON A SERVER
-
+import random
 import requests
 import time
 import os
@@ -32,18 +32,35 @@ def scrape_prices(url, category):
     i = 0
     
     while i < 5:
+        print(f"Handling product {i}")
         results = s.find(id=f'product{i}')
+        if results is None:
+            print(f"Product {i} not found")
+            i += 1
+            continue
+        further = results.find('a',{'class':'productlist__link'}).get('href')
         imgs = results.find_all('img')
         data = results.find_all('span', class_='notrans')
 
         names = data[0].text
         prices = data[2].text
         image = imgs[0].get("src")
-
-        mydict = {"name": names, "preis": prices, "image": image}
-        mycol.insert_one(mydict)
+        product_link = (f'https://geizhals.de/{further}')
         
-        i += 1
+        time.sleep(120+random.randint(-10,10))
+        
+        #get link from product site
+        prod = requests.get(product_link)
+        s2 = BeautifulSoup(prod.text, 'html.parser')
+        offer = s2.find(id='offer__0')
+        if offer is None:
+            i += 1
+            print(f"Cannot find offer 0 for product {i}")
+            continue
+        link = offer.find('a',{'class':'offer_bt'}).get('href')
+        
+        mydict = {"name": names, "preis": prices, "image": image, "link": link}
+        mycol.insert_one(mydict)
 
 def GPU_Prices():
     scrape_prices('https://geizhals.de/?cat=gra16_512', 'GPU')
@@ -71,7 +88,7 @@ while True:
     for func in functions:
         func()
         print(time.time(), ": Scraped ", func.__name__)
-        time.sleep(600)
+        time.sleep(180+random.randint(-10,10))
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
 # if html.status_code == 200:
