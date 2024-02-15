@@ -50,12 +50,12 @@ def scrape_prices(url, category):
             i += 1
             continue
         further = results.find('a',{'class':'productlist__link'}).get('href')
-        imgs = results.find_all('img')
+        #imgs = results.find_all('img')
         data = results.find_all('span', class_='notrans')
 
         names = data[0].text
         prices = data[2].text
-        image = imgs[0].get("src")
+        #image = imgs[0].get("src")
         product_link = (f'https://geizhals.de/{further}')
         
         time.sleep(120+random.randint(-10,10))
@@ -63,9 +63,10 @@ def scrape_prices(url, category):
         #get link from product site
         prod = requests.get(product_link)
         s2 = BeautifulSoup(prod.text, 'html.parser')
-        with open('data2.txt', 'w', encoding='utf-8') as file:
-            file.write(prod.text)
         offer = s2.find(id='offer__0')
+        imgID = s2.find(id='gh-main')
+        imgs = imgID.find_all('img', class_='swiper-slide__image')
+        image = imgs[0].get('src')
         if offer is None:
             i += 1
             print(f"Cannot find offer 0 for product {i}")
@@ -96,7 +97,7 @@ def RAM_Prices():
 def Case_Prices():
     scrape_prices('https://geizhals.de/?cat=gehatx', 'Case')
 
-CPU_Prices()
+Main_Prices()
 
 ####### Code fürs Umleiten von den Daten in die Datei data.txt
 # if html.status_code == 200:
