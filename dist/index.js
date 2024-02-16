@@ -200,6 +200,7 @@ function handleInsert(collectionName, document) {
   console.log('  Preis:', preis);
 }
 },{}],"index.js":[function(require,module,exports) {
+var _process$env$PORT;
 require('dotenv').config();
 const app = require('./app');
 const port = '8888';
@@ -240,7 +241,7 @@ fastify.get("/", async (req, reply) => {
 });
 fastify.listen({
   host: "0.0.0.0",
-  port: 3000
+  port: (_process$env$PORT = process.env.PORT) !== null && _process$env$PORT !== void 0 ? _process$env$PORT : 3000
 }, (err, address) => {
   if (err) {
     console.log("Failed to start web server.");

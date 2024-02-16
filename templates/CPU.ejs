@@ -1,0 +1,55 @@
+<html>
+    <body style="  background-color: #282c34;min-height: 100vh;display: grid;grid-template-columns: auto auto auto auto;
+    font-size: calc(10px + 2vmin);color: white; ">
+
+        <nav style="box-sizing: border-box;width: 100%;display: flex;justify-content: space-between;
+        align-items: stretch;background-color: rgb(26, 159, 192);color: #fff;position: absolute;
+        top: 0px;gap: 2rem;padding: 0 1rem;box-shadow: 0.5rem 0.5rem 1rem black;">
+            <a href="./index.ejs" style="font-size: 4rem;color: inherit;text-decoration: none;
+            height: 100%;display: flex;align-items: center;padding: .25rem;">Preisjäger</a>
+              <ul style="    padding: 0;margin: 0;list-style: none;display: flex;gap: 1rem;">
+                 <li>
+                  <a href="./GPU.ejs" style="     color: inherit;text-decoration: none;
+                  height: 100%;display: flex;align-items: center;padding: .25rem;">GPU</a>
+                  </li>
+                  <li>
+                  <a href="./CPU.ejs" style="color: inherit;text-decoration: none;
+                  height: 100%;display: flex;align-items: center;padding: .25rem;">CPU</a>
+                  </li>
+                  <li>
+                  <a href="./Mainboard.ejs" style="color: inherit;text-decoration: none;
+                  height: 100%;display: flex;align-items: center;padding: .25rem;">Mainboard</a>
+                  </li>
+                  <li>
+                  <a href="./PSU.ejs" style="color: inherit;text-decoration: none;
+                  height: 100%;display: flex;align-items: center;padding: .25rem;">PSU</a>
+                  </li>
+                  <li>
+                  <a href="./Case.ejs" style="color: inherit;text-decoration: none;
+                  height: 100%;display: flex;align-items: center;padding: .25rem;">Case</a>
+                  </li>
+              </ul>
+          </nav>
+
+        <% CPU.forEach(function(cpu){ %>
+            <div style="    margin-top: 7rem;
+            margin-left: 1rem;
+            height: 22rem;
+            width: 22rem;
+            text-align: center;
+            background-color: white;
+            color: black;
+            box-shadow: 1rem 1rem 1.5rem black;
+            border-radius: 1rem;
+            font-size: 1.4rem;">
+                <% if (cpu.image) { %>
+                    <img src="<%= cpu.image %>" />
+                  <% } %>
+
+                <div><%= cpu.name %></div>
+                <div><%= cpu.preis %></div>  
+                </div>
+        <% }); %>
+
+    </body>
+</html>
